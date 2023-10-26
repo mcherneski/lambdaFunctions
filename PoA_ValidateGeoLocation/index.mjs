@@ -8,27 +8,33 @@ const geoTableManager = new GeoDataManager(geoConfig)
 export const handler = async (event) => {
   console.log(event)
   try {
-    const data = await geoTableManager.queryRadius({
+    const body = JSON.parse(event.body)
+    const { Longitude, Latitude } = body
+    
+    let response = await geoTableManager.queryRadius({
       RadiusInMeter: 1000,
       CenterPoint: {
-        latitude: event.Latitude,
-        longitude: event.Longitude
+        latitude: Latitude,
+        longitude: Longitude
       }
     })
+    console.log(response)
 
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
       },
-      body: JSON.stringify({results: data})
+      body: JSON.stringify(response)
     }
   } catch (error) {
     console.error(error);
     return { 
       statusCode: 500,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({message: error.message})
     }
