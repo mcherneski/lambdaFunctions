@@ -1,4 +1,3 @@
-// Todo: Upload token image to S3 and return the url for input to dynamodb
 import { GeoDataManagerConfiguration, GeoDataManager } from 'dynamodb-geo-v3'
 import { DynamoDB } from '@aws-sdk/client-dynamodb'
 
@@ -12,25 +11,26 @@ export const handler = async (event) => {
     const data = await geoTableManager.queryRadius({
       RadiusInMeter: 1000,
       CenterPoint: {
-        latitude: event.locationLat,
-        longitude: event.locationLng
+        latitude: event.Latitude,
+        longitude: event.Longitude
       }
-    }).promise()
+    })
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        results: data
-      })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({results: data})
     }
   } catch (error) {
-    console.log(error);
-
+    console.error(error);
     return { 
       statusCode: 500,
-      body: JSON.stringify({
-        message: 'Internal Service Error'
-      })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({message: error.message})
     }
   }
 };
