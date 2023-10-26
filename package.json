@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.436.0",
-    "dynamodb-geo-v3": "^1.0.0"
-  }
-}
