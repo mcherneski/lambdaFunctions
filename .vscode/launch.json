@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "PoA_CreateNewAdventure:index.handler (nodejs18.x)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "${workspaceFolder}/PoA_CreateNewAdventure",
+                "lambdaHandler": "index.handler"
+            },
+            "lambda": {
+                "runtime": "nodejs18.x",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "PoA_ValidateGeoLocation:index.handler (nodejs18.x)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "${workspaceFolder}/PoA_ValidateGeoLocation",
+                "lambdaHandler": "index.handler"
+            },
+            "lambda": {
+                "runtime": "nodejs18.x",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "PoA_UploadTokenImageToS3:index.handler (nodejs18.x)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "${workspaceFolder}/PoA_UploadTokenImageToS3",
+                "lambdaHandler": "index.handler"
+            },
+            "lambda": {
+                "runtime": "nodejs18.x",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        }
+    ]
+}
