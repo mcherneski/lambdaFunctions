@@ -6,37 +6,54 @@ const geoConfig = new GeoDataManagerConfiguration(ddb, 'ProofOfAdventure_Locatio
 const geoTableManager = new GeoDataManager(geoConfig)
 
 export const handler = async (event) => {
-  console.log(event)
-  try {
-    const body = JSON.parse(event.body)
-    const { Longitude, Latitude } = body
-    
-    let response = await geoTableManager.queryRadius({
-      RadiusInMeter: 1000,
+  const eventBody = JSON.parse(event.body)
+  let responseBody;
+  let statusCode;
+
+  const {Longitude, Latitude} = eventBody
+  console.log(Latitude, Longitude)
+
+  try{
+    const data = await geoTableManager.queryRadius({
+      RadiusInMeter: 10000,
       CenterPoint: {
         latitude: Latitude,
         longitude: Longitude
       }
     })
-    console.log(response)
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify(response)
+    console.log(data)
+
+    if (data.length > 0) {
+      console.log('GeoLocation found for specified image!')
+      responseBody = {
+        message: 'Location found.',
+        results: data[0]
+      }
+      statusCode = 200
+    } else {
+      responseBody = {
+        message: 'Location not found.',
+        results: []
+      }
+      statusCode = 200
     }
-  } catch (error) {
-    console.error(error);
-    return { 
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({message: error.message})
+  } catch {
+    responseBody = {
+      message: 'Error calling API.',
+      results: []
     }
+    statusCode = 500
   }
+  
+  const response = {
+    statusCode: statusCode,
+    headers: {
+      "Access-Control-Allow-Headers" : "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+    },
+    body: JSON.stringify(responseBody)
+  }
+  return response;
 };
